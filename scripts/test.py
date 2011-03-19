@@ -16,9 +16,45 @@ execfile(activate_this, dict(__file__=activate_this))
 
 sys.path.insert(0, '%s/src/python' % (basedir,))
 
+
+import string
+import random
+
+import twitter
+
 from tlog.test import test_tlog
+
+consumer_key = '************************'
+consumer_secret = '************************'
+access_token = '************************'
+access_token_secret = '************************'
+user = 'asdasdasdasd'
+
+def random_tweet():
+    """
+    returns 140 character alnum string
+    """
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(140))
 
 if __name__ == "__main__":
     #print "basedir:%s" % (basedir,)
     #print "sys.path:%s" % (sys.path,)
     test_tlog()
+
+
+
+    #api = twitter.Api()
+    api = twitter.Api(consumer_key=consumer_key,
+                      consumer_secret=consumer_secret, 
+                      access_token_key=access_token, 
+                      access_token_secret=access_token_secret) 
+
+    print api.VerifyCredentials() 
+    statuses = api.GetUserTimeline(user)
+    print [s.text for s in statuses]
+
+
+
+    
+    status = api.PostUpdate(random_tweet())
+    print status.text
